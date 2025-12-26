@@ -27,10 +27,11 @@ public class PhyServBotMain {
         EnumSet<GatewayIntent> intents = EnumSet.noneOf(GatewayIntent.class);
         JDA api = JDABuilder.createLight(json.get("token").getAsString(), intents)
                 .addEventListeners(new SlashCommandListener())
+                .addEventListeners(new ButtonInteractionListener())
                 .build();
 
         api.updateCommands().addCommands(
-                Commands.slash("controls", "Get control message")
+                Commands.slash("controls", "Get initial message")
                         .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.ADMINISTRATOR))
                         .setContexts(InteractionContextType.ALL)
                         .setIntegrationTypes(IntegrationType.ALL)
