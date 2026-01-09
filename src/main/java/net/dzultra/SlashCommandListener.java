@@ -11,6 +11,9 @@ public class SlashCommandListener extends ListenerAdapter {
         String userId = event.getUser().getId();
 
         if (event.getName().equals("controls")) {
+            if (event.getUser().getId().equals(PhyServBotMain.json.get("admin_id").getAsString())) {
+                event.reply("You are no authorized to use this command! Please contact DZultra").setEphemeral(true).queue();
+            }
             if(ServerRegistry.isServerRunning(event.getChannel().getId())) {
                 event.reply("").addComponents(ActionRow.of(
                         Button.danger(userId + ":stop", "Stop").asEnabled()
