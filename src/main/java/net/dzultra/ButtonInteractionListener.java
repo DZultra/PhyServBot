@@ -49,7 +49,7 @@ public class ButtonInteractionListener extends ListenerAdapter {
         boolean start = "start".equals(action);
         System.out.println(start ? "Starting the Neoforge Server..." : "Stopping the NeoForge Server...");
 
-        APICaller.callServer(1, action);
+        APICaller.callServerRunner(1, action);
 
         Server server = ServerRegistry.getByChannelId(event.getChannel().getId());
         if (server != null) server.setRunning(start);
