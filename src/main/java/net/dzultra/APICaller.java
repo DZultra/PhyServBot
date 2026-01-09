@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 
 public class APICaller {
 
@@ -15,12 +16,12 @@ public class APICaller {
     /**
      * Call the API to start or stop a server
      *
-     * @param serverId 1 for NeoForge, 2 for Fabric, etc.
+     * @param serverId 1 for NeoForge
      * @param action   "start" or "stop"
      */
-    public static void callServer(int serverId, String action) {
+    public static void callServerRunner(int serverId, String action) {
         try {
-            // Build the URL, e.g., http://192.168.178.187:8000/start/1
+            // Build the URL http://192.168.178.187:8000/start/1
             String url = BASE_URL + action + "/" + serverId;
 
             HttpRequest request = HttpRequest.newBuilder()
@@ -40,6 +41,35 @@ public class APICaller {
 
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static boolean callServerStatus(Duration timeout) {
+        try {
+            String url = BASE_URL + "status";
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("X-API-Key", API_KEY)
+                    .timeout(timeout) // ⏱️ max wait time
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response =
+                    httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            System.out.println("API Response: " + response.statusCode() + " - " + response.body());
+
+            return response.statusCode() == 200
+                    && response.body().contains("\"status\":\"ok\"");
+
+        } catch (java.net.http.HttpTimeoutException e) {
+            System.out.println("Status request timed out.");
+            return false;
+
+        } catch (IOException | InterruptedException e) {
+            System.out.println("Server is offline (no API reachable).");
+            return false;
         }
     }
 }
