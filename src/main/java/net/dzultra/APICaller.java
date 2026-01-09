@@ -72,4 +72,24 @@ public class APICaller {
             return false;
         }
     }
+
+    public static void stopPhysicalServer() {
+        String url = BASE_URL + "kill";
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("X-API-Key", API_KEY)
+                .POST(HttpRequest.BodyPublishers.noBody())
+                .build();
+
+        try {
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println("Kill API Response: " + response.statusCode() + " - " + response.body());
+            if (response.statusCode() >= 200) {
+                response.statusCode();
+            }
+        } catch (IOException | InterruptedException e) {
+            System.out.println("Server is offline (no API reachable)");
+        }
+    }
 }

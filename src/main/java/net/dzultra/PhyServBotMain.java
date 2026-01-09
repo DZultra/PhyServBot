@@ -58,6 +58,10 @@ public class PhyServBotMain {
                 Commands.slash("status", "Get server status")
                         .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.ADMINISTRATOR))
                         .setContexts(InteractionContextType.ALL)
+                        .setIntegrationTypes(IntegrationType.ALL),
+                Commands.slash("server","Start/Stop Physical Server")
+                        .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.ADMINISTRATOR))
+                        .setContexts(InteractionContextType.ALL)
                         .setIntegrationTypes(IntegrationType.ALL)
         ).queue();
     }
